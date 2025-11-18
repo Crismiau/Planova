@@ -2,7 +2,7 @@
 package com.Planova.PlanovaCode.dto;
 
 import lombok.Data;
-
+// First HU1
 @Data
 public class EventDTO {
     private long id;

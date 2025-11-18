@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
 
+// First HU1
 @RestController
 @RequestMapping("/events")
 public class EventController {

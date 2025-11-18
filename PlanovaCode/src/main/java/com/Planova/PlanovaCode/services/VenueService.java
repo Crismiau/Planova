@@ -6,7 +6,7 @@ import com.Planova.PlanovaCode.repository.VenueRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+// First HU1
 @Service
 public class VenueService {
     private final VenueRepository repo;

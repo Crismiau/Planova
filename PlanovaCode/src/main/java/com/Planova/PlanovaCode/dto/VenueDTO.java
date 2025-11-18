@@ -3,7 +3,7 @@ package com.Planova.PlanovaCode.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
+// First HU1
 @Data
 public class VenueDTO {
     private long id;

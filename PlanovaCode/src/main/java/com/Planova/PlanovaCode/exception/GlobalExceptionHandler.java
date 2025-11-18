@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// First HU1
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
