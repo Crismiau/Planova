@@ -1,14 +1,13 @@
+// src/main/java/com/Planova/PlanovaCode/dto/EventDTO.java
 package com.Planova.PlanovaCode.dto;
 
-
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class EventDTO {
-
-    public long id;
-    public String name;
-    public String description;
-    public int capacity;
-    public String VenueName;
+    private long id;
+    private String name;
+    private String description;
+    private int capacity;
+    private String venueName;
 }

@@ -1,54 +1,66 @@
+// src/main/java/com/Planova/PlanovaCode/services/EventService.java
 package com.Planova.PlanovaCode.services;
 
 import com.Planova.PlanovaCode.dto.EventCreationDTO;
 import com.Planova.PlanovaCode.dto.EventDTO;
-import com.Planova.PlanovaCode.dto.VanueDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.Planova.PlanovaCode.dto.EventUpdateDTO;
+import com.Planova.PlanovaCode.dto.VenueDTO;
+import com.Planova.PlanovaCode.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventService {
+    private final EventRepository repo;
+    private final VenueService venueService;
 
-    private final VanueService vanueService;
-    private static final List<EventDTO> eventos = new ArrayList<>();
-    private static long nextId  = 1;
-
-    @Autowired
-    public EventService(VanueService vanueService){
-        this.vanueService = vanueService;
+    public EventService(EventRepository repo, VenueService venueService) {
+        this.repo = repo;
+        this.venueService = venueService;
     }
 
-    // Método de creación que recibe el DTO de INPUT (CreationDTO)
     public EventDTO create(EventCreationDTO creationDTO) {
-
-        // --- PASO CLAVE: BÚSQUEDA DEL ID ---
-        VanueDTO venue = vanueService.findByName(creationDTO.getVenueName());
-
-        // 1. Manejo de Errores (para Tarea #3: aquí se lanzaría una excepción 400)
-        if (venue == null) {
-            // Por ahora, para que compile y sigamos, lanzamos un error básico.
-            // En Tarea #3, lo haremos con @ResponseStatus.
+        VenueDTO v = venueService.findByName(creationDTO.getVenueName());
+        if (v == null) {
             throw new IllegalArgumentException("Venue not found with name: " + creationDTO.getVenueName());
         }
 
+        EventDTO e = new EventDTO();
+        e.setId(0);
+        e.setName(creationDTO.getName());
+        e.setDescription(creationDTO.getDescription());
+        e.setCapacity(creationDTO.getCapacity());
+        e.setVenueName(creationDTO.getVenueName());
 
-        // 2. Conversión a EventDTO (el objeto interno) y Asignación de ID
-        EventDTO newEvent = new EventDTO();
-        newEvent.setId(nextId++); // Asigna un nuevo ID de Evento
-        newEvent.setName(creationDTO.getName());
-        newEvent.setDescription(creationDTO.getDescription());
-        newEvent.setId(venue.getId()); // Asigna el ID del Venue encontrado
-        // ... set other fields
-
-        // 3. Guardar en la lista en memoria
-        eventos.add(newEvent);
-
-        return newEvent; // Devuelve el objeto guardado
+        return repo.save(e);
     }
 
+    public List<EventDTO> findAll() {
+        return repo.findAll();
+    }
 
+    public Optional<EventDTO> findById(long id) {
+        return repo.findById(id);
+    }
 
+    public EventDTO update(long id, EventUpdateDTO dto) {
+        var existing = repo.findById(id).orElse(null);
+        if (existing == null) return null;
+
+        VenueDTO v = venueService.findByName(dto.getVenueName());
+        if (v == null) throw new IllegalArgumentException("Venue not found with name: " + dto.getVenueName());
+
+        existing.setName(dto.getName());
+        existing.setDescription(dto.getDescription());
+        existing.setCapacity(dto.getCapacity());
+        existing.setVenueName(dto.getVenueName());
+
+        return repo.save(existing);
+    }
+
+    public boolean delete(long id) {
+        return repo.deleteById(id);
+    }
 }
