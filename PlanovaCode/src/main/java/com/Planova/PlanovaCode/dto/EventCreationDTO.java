@@ -7,6 +7,7 @@ import lombok.Data;
 // First HU1
 @Data
 public class EventCreationDTO {
+
     @NotBlank(message = "name is required")
     private String name;
 

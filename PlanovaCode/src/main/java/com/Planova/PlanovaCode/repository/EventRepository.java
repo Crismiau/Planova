@@ -1,4 +1,4 @@
-// src/main/java/com/Planova/PlanovaCode/repository/EventRepository.java
+// src/main/java/com/Planova/PlanovaCode/repository/EventRepositoryJPA.java
 package com.Planova.PlanovaCode.repository;
 
 import com.Planova.PlanovaCode.dto.EventDTO;
@@ -41,4 +41,12 @@ public class EventRepository {
         store.clear();
         nextId = 1;
     }
+
+    public synchronized Optional<EventDTO> findByName(String name) {
+        return store.stream()
+                .filter(e -> e.getName().equalsIgnoreCase(name))
+                .findFirst();
+    }
+
+
 }

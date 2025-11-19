@@ -20,15 +20,23 @@ public class EventService {
         this.repo = repo;
         this.venueService = venueService;
     }
-
     public EventDTO create(EventCreationDTO creationDTO) {
+
+        Optional<EventDTO> existingEvent = repo.findByName(creationDTO.getName());
+        if (existingEvent.isPresent()) {
+            throw new IllegalArgumentException(
+                    "An event with the name '" + creationDTO.getName() + "' already exists."
+            );
+        }
+
+
         VenueDTO v = venueService.findByName(creationDTO.getVenueName());
         if (v == null) {
             throw new IllegalArgumentException("Venue not found with name: " + creationDTO.getVenueName());
         }
 
+        // Crear evento
         EventDTO e = new EventDTO();
-        e.setId(0);
         e.setName(creationDTO.getName());
         e.setDescription(creationDTO.getDescription());
         e.setCapacity(creationDTO.getCapacity());
@@ -36,6 +44,7 @@ public class EventService {
 
         return repo.save(e);
     }
+
 
     public List<EventDTO> findAll() {
         return repo.findAll();

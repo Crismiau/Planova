@@ -1,4 +1,4 @@
-// src/main/java/com/Planova/PlanovaCode/repository/VenueRepository.java
+// src/main/java/com/Planova/PlanovaCode/repository/VenueRepositoryJPA.java
 package com.Planova.PlanovaCode.repository;
 
 import com.Planova.PlanovaCode.dto.VenueDTO;
@@ -29,6 +29,14 @@ public class VenueRepository {
     }
 
     public synchronized VenueDTO save(VenueDTO venue) {
+
+        Optional<VenueDTO> existing = findByName(venue.getName());
+
+        if(existing.isPresent() && existing.get().getId() != venue.getId()){
+            throw new IllegalArgumentException("Venue name already exists: " + venue.getName());
+        }
+
+
         if (venue.getId() == 0) {
             venue.setId(nextId++);
             store.add(venue);
