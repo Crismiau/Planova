@@ -4,7 +4,8 @@ package com.Planova.PlanovaCode.controller;
 import com.Planova.PlanovaCode.dto.EventCreationDTO;
 import com.Planova.PlanovaCode.dto.EventDTO;
 import com.Planova.PlanovaCode.dto.EventUpdateDTO;
-import com.Planova.PlanovaCode.services.EventService;
+import com.Planova.PlanovaCode.repository.IEventService;
+import com.Planova.PlanovaCode.services.EventServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -21,9 +22,9 @@ import java.util.List;
 @RequestMapping("/events")
 public class EventController {
 
-    private final EventService service;
+    private final IEventService service;
 
-    public EventController(EventService service) {
+    public EventController(IEventService service) {
         this.service = service;
     }
 
@@ -33,9 +34,6 @@ public class EventController {
 
     //    -----------------------------------------------------------------------------
                                         // Create Event
-
-
-
 
 
     @Operation(summary = "Create event")
@@ -72,8 +70,6 @@ public class EventController {
 
 
 
-
-
     @Operation(summary = "Get all events")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "List of events returned")
@@ -90,6 +86,8 @@ public class EventController {
 
     //    -----------------------------------------------------------------------------
                                            // Get By Id
+
+
 
     @Operation(summary = "Get event by id")
     @ApiResponses({
@@ -112,10 +110,9 @@ public class EventController {
 
 
 
+
     //    -----------------------------------------------------------------------------
                                             // Update By Id
-
-
 
 
 
@@ -142,12 +139,10 @@ public class EventController {
 
 
 
+
+
     //    -----------------------------------------------------------------------------
                                             // Delete by Id
-
-
-
-
 
 
 

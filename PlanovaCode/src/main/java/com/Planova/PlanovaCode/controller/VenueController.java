@@ -2,7 +2,8 @@
 package com.Planova.PlanovaCode.controller;
 
 import com.Planova.PlanovaCode.dto.VenueDTO;
-import com.Planova.PlanovaCode.services.VenueService;
+import com.Planova.PlanovaCode.repository.IVenueService;
+import com.Planova.PlanovaCode.services.VenueServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,9 +19,9 @@ import java.util.List;
 @RequestMapping("/venues")
 public class VenueController {
 
-    private final VenueService service;
+    private final IVenueService service;
 
-    public VenueController(VenueService service) {
+    public VenueController(IVenueService service) {
         this.service = service;
     }
 
