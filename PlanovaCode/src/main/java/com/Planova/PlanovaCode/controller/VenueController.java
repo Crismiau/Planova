@@ -2,17 +2,23 @@
 package com.Planova.PlanovaCode.controller;
 
 import com.Planova.PlanovaCode.dto.VenueDTO;
-import com.Planova.PlanovaCode.repository.IVenueService;
-import com.Planova.PlanovaCode.services.VenueServiceImpl;
+import com.Planova.PlanovaCode.services.interfaces.IEventService;
+import com.Planova.PlanovaCode.services.interfaces.IVenueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+
+import java.time.LocalDate;
 import java.util.List;
 // First HU1
 @RestController
@@ -67,7 +73,12 @@ public class VenueController {
                             """)
             ))
     @GetMapping
-    public ResponseEntity<List<VenueDTO>> list() {
+    public ResponseEntity<List<VenueDTO>> list(
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio
+    ) {
         return ResponseEntity.ok(service.findAll());
     }
 

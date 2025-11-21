@@ -1,15 +1,15 @@
-springs:
+spring:
   profiles:
     active: dev
 
 ---
-springs:
+spring:
   config:
     activate:
       on-profile: dev
 
   datasource:
-    url: jdbc:h2:mem:planova
+    url: jdbc:h2:mem:planova;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
     username: root
     password: "root"
@@ -30,7 +30,7 @@ springs:
 
 
 server:
-  port: 8080
+  port: 8081
 app:
   env: dev
 

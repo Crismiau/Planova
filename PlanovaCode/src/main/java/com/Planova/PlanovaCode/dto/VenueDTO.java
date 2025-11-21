@@ -6,7 +6,7 @@ import lombok.Data;
 // First HU1
 @Data
 public class VenueDTO {
-    private long id;
+    private Long id;
 
     @NotBlank(message = "name is required")
     private String name;

@@ -1,21 +1,26 @@
-// src/main/java/com/Planova/PlanovaCode/controller/EventController.java
 package com.Planova.PlanovaCode.controller;
 
 import com.Planova.PlanovaCode.dto.EventCreationDTO;
 import com.Planova.PlanovaCode.dto.EventDTO;
 import com.Planova.PlanovaCode.dto.EventUpdateDTO;
-import com.Planova.PlanovaCode.repository.IEventService;
-import com.Planova.PlanovaCode.services.EventServiceImpl;
+import com.Planova.PlanovaCode.services.interfaces.IEventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
-import java.util.List;
+import java.time.LocalDate;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 
 // First HU1
 @RestController
@@ -55,31 +60,36 @@ public class EventController {
                                     { "error": "venueName is required" }
                                     """)))
     })
-    @PostMapping
-    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventCreationDTO dto) {
-        EventDTO created = service.create(dto);
-        return ResponseEntity.status(201).body(created);
-    }
-
-
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EventDTO createEvent(@Valid @RequestBody EventCreationDTO dto) {
+ return service.create(dto);
+        }
 
 
 
     //    -----------------------------------------------------------------------------
                                         // Get All
 
-
-
-    @Operation(summary = "Get all events")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "List of events returned")
+    @Operation(
+            summary = "Get all events",
+            description = "Returns a list of all events stored in the system"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of events returned successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
-    public ResponseEntity<List<EventDTO>> getAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<Page<EventDTO>> getAll(
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio
+    ) {
+        Page<EventDTO> events = service.findAll(pageable, city, category, fechaInicio);
+
+        return ResponseEntity.ok(events);
     }
-
-
 
 
 
