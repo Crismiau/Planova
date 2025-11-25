@@ -1,6 +1,6 @@
 package com.Planova.PlanovaCode.infrastructure.mapper;
 
-import com.Planova.PlanovaCode.domain.events.models.Event;
+import com.Planova.PlanovaCode.domain.models.Event;
 import com.Planova.PlanovaCode.shared.dto.EventRequestDTO;
 import com.Planova.PlanovaCode.shared.dto.EventResponseDTO;
 import org.mapstruct.Mapper;

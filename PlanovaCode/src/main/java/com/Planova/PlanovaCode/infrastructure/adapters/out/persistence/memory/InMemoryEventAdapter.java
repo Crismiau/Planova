@@ -1,8 +1,10 @@
 package com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.memory;
 
-import com.Planova.PlanovaCode.domain.events.models.Event;
-import com.Planova.PlanovaCode.domain.events.ports.out.EventRepositoryPort;
-import org.springframework.context.annotation.Profile;
+import com.Planova.PlanovaCode.domain.models.Event;
+import com.Planova.PlanovaCode.domain.ports.out.EventRepositoryPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -10,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
-@Profile("memory")
 public class InMemoryEventAdapter implements EventRepositoryPort {
 
     private final Map<Long, Event> store = new HashMap<>();
@@ -21,36 +22,61 @@ public class InMemoryEventAdapter implements EventRepositoryPort {
         if (event.getId() == null) {
             event.setId(nextId.getAndIncrement());
         }
-        store.put(event.getId(), event);
-        return event;
+        store.put(event.getId(), copy(event));
+        return copy(event);
     }
 
     @Override
     public List<Event> findAll() {
-        return new ArrayList<>(store.values());
+        return store.values().stream()
+                .map(this::copy)
+                .collect(Collectors.toList());
     }
-
+    
     @Override
-    public org.springframework.data.domain.Page<Event> findAll(org.springframework.data.domain.Pageable pageable, String city, String category, java.time.LocalDateTime startDate) {
-        // Implementación simplificada: devolver todos en page
-        List<Event> list = findAll();
+    public Page<Event> findAll(Pageable pageable) {
+        List<Event> allEvents = new ArrayList<>(store.values());
+
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), list.size());
-        return new org.springframework.data.domain.PageImpl<>(list.subList(start, end), pageable, list.size());
+        int end = Math.min((start + pageable.getPageSize()), allEvents.size());
+
+        List<Event> pageContent = Collections.emptyList();
+        if (start <= end) {
+            pageContent = allEvents.subList(start, end);
+        }
+
+        return new PageImpl<>(pageContent.stream().map(this::copy).collect(Collectors.toList()), pageable, allEvents.size());
     }
 
     @Override
     public Optional<Event> findById(Long id) {
-        return Optional.ofNullable(store.get(id));
+        return Optional.ofNullable(store.get(id))
+                .map(this::copy);
     }
 
     @Override
     public Optional<Event> findByName(String name) {
-        return store.values().stream().filter(e -> e.getName().equalsIgnoreCase(name)).findFirst();
+        return store.values().stream()
+                .filter(e -> e.getName() != null && e.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .map(this::copy);
     }
 
     @Override
     public void deleteById(Long id) {
         store.remove(id);
+    }
+
+    private Event copy(Event e) {
+        Event c = new Event();
+        c.setId(e.getId());
+        c.setName(e.getName());
+        c.setDescription(e.getDescription());
+        c.setCapacity(e.getCapacity());
+        c.setVenueName(e.getVenueName());
+        c.setCategory(e.getCategory());
+        c.setCity(e.getCity());
+        c.setStartDate(e.getStartDate());
+        return c;
     }
 }
