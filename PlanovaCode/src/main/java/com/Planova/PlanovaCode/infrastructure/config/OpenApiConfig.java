@@ -1,5 +1,5 @@
 // src/main/java/com/Planova/PlanovaCode/config/OpenApiConfig.java
-package com.Planova.PlanovaCode.config;
+package com.Planova.PlanovaCode.infrastructure.config;
 
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.OpenAPI;

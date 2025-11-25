@@ -1,4 +1,4 @@
-    package com.Planova.PlanovaCode.entity;
+    package com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity;
 
 
     import jakarta.persistence.*;

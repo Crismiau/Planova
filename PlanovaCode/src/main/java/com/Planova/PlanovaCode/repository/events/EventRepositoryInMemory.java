@@ -1,9 +1,7 @@
 // src/main/java/com/Planova/PlanovaCode/repository/EventRepositoryJPA.java
 package com.Planova.PlanovaCode.repository.events;
 
-import com.Planova.PlanovaCode.dto.EventDTO;
-import com.Planova.PlanovaCode.entity.EventEntity;
-import com.Planova.PlanovaCode.repository.IGenericRepository;
+import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.EventEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

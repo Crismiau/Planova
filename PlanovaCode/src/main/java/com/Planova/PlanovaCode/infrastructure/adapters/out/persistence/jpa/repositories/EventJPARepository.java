@@ -1,7 +1,7 @@
-package com.Planova.PlanovaCode.repository.events;
+package com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.repositories;
 
 
-import com.Planova.PlanovaCode.entity.EventEntity;
+import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.EventEntity;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @Primary
-public interface EventRepositoryJPA extends JpaRepository<EventEntity, Long>, JpaSpecificationExecutor<EventEntity> {
+public interface EventJPARepository extends JpaRepository<EventEntity, Long>, JpaSpecificationExecutor<EventEntity> {
 
     Optional<EventEntity> findByName(String name);
 }

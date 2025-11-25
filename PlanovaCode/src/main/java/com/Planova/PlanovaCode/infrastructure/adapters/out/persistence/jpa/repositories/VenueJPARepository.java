@@ -1,4 +1,4 @@
-package com.Planova.PlanovaCode.repository.venue;
+package com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.repositories;
 
 import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.VenueEntity;
 import org.springframework.context.annotation.Primary;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 @Primary
-public interface VenueRepositoryJPA extends JpaRepository<VenueEntity, Long>, IGenericRepository<VenueEntity, Long> {
+public interface VenueJPARepository extends JpaRepository<VenueEntity, Long> {
 
     Optional<VenueEntity> findByName(String name);
 }

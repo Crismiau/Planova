@@ -1,4 +1,4 @@
-package com.Planova.PlanovaCode.config;
+package com.Planova.PlanovaCode.infrastructure.config;
 
 import com.Planova.PlanovaCode.mapper.EventMapper;
 import com.Planova.PlanovaCode.mapper.VenueMapper;
@@ -12,7 +12,7 @@ public class MapperConfig {
 
     @Bean
     public EventMapper eventMapper(){
-            return Mappers.getMapper(EventMapper.class);
+        return Mappers.getMapper(EventMapper.class);
     }
 
     @Bean

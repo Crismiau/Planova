@@ -1,9 +1,8 @@
 package com.Planova.PlanovaCode.services.impl;
 
 import com.Planova.PlanovaCode.dto.VenueDTO;
-import com.Planova.PlanovaCode.entity.VenueEntity;
+import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.VenueEntity;
 import com.Planova.PlanovaCode.mapper.VenueMapper;
-import com.Planova.PlanovaCode.repository.IGenericRepository;
 import com.Planova.PlanovaCode.services.interfaces.IVenueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

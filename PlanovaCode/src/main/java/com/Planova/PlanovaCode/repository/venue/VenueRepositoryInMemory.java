@@ -1,9 +1,7 @@
 // src/main/java/com/Planova/PlanovaCode/repository/VenueRepositoryJPA.java
 package com.Planova.PlanovaCode.repository.venue;
 
-import com.Planova.PlanovaCode.dto.VenueDTO;
-import com.Planova.PlanovaCode.entity.VenueEntity;
-import com.Planova.PlanovaCode.repository.IGenericRepository;
+import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.VenueEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
