@@ -6,13 +6,16 @@ import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entit
 import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.entity.VenueEntity;
 import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.repositories.EventJPARepository;
 import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.repositories.VenueJPARepository;
+import com.Planova.PlanovaCode.infrastructure.adapters.out.persistence.jpa.specification.EventSpecification;
 import com.Planova.PlanovaCode.infrastructure.mapper.EventEntityMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,4 +69,33 @@ public class EventJpaAdapter implements EventRepositoryPort {
     public void deleteById(Long id) {
         repo.deleteById(id);
     }
+
+
+
+
+    // Specifications query's and filters:
+
+    @Override
+    public List<Event> findByVenue(Long venueId){
+        return mapper.toDomainList(repo.findByVenueId(venueId));
+    }
+
+    @Override
+    public List<Event> findByDateRange(LocalDateTime start, LocalDateTime end) {
+        return mapper.toDomainList(repo.findByDateRange(start, end));
+    }
+
+    @Override
+    public List<Event> searchFiltered(Long venueId, String category, LocalDateTime startDate, LocalDateTime endDate) {
+        Specification<EventEntity> spec =
+                Specification.where(EventSpecification.venueIs(venueId)).and(EventSpecification.categoryIs(category)).and(EventSpecification.startDateAfter(startDate)).and(EventSpecification.endDateBefore(endDate));
+        return mapper.toDomainList(repo.findAll(spec));
+
+    }
+
+    @Override
+    public List<Event> findAllOptimized() {
+        return mapper.toDomainList(repo.findAllFetchVenue());
+    }
+
 }

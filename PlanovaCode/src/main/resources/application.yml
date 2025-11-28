@@ -1,45 +1,86 @@
-spring:
-  profiles:
-    active: dev
+# ===================================================================
+# =================== GENERAL CONFIGURATION =====================
+# ===================================================================
+server:
+  port: 8081
 
+spring:
+  # --- Active Profile ---
+  profiles:
+    active: dev # Perfil por defecto
+
+  # --- JPA / Hibernate (Common) ---
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 10
+        jdbc:
+          batch_size: 10
+    hibernate:
+        ddl-auto: none # Dejar que Flyway maneje el schema
+
+  # --- Flyway (Common) ---
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # --- SQL Initialization ---
+  sql:
+    init:
+      mode: never # Flyway se encarga de esto
+
+# --- Logging ---
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+# ===================================================================
+# =================== DEVELOPMENT PROFILE (dev) =====================
+# ===================================================================
 ---
 spring:
   config:
     activate:
       on-profile: dev
 
+  # --- MySQL Database ---
   datasource:
-    url: jdbc:h2:mem:planova;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driverClassName: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/planova?useSSL=false&serverTimezone=UTC
     username: root
-    password: "root"
-
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+  
+  # --- H2 Console (Enabled for dev) ---
   h2:
     console:
       enabled: true
       path: /h2-console
 
-  jpa:
-    hibernate:
-        ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-
-
-server:
-  port: 8081
-app:
-  env: dev
-
+# ===================================================================
+# ===================== TEST PROFILE (test) =========================
+# ===================================================================
 ---
 spring:
   config:
     activate:
       on-profile: test
-server:
-  port: 8081
-app:
-  env: test
+
+  # --- H2 In-Memory Database ---
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: root
+    password: root
+
+  # --- JPA for Testing ---
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # Crear y destruir el schema para cada test
+
+  # --- Flyway (Disabled for tests, Hibernate handles schema) ---
+  flyway:
+    enabled: false

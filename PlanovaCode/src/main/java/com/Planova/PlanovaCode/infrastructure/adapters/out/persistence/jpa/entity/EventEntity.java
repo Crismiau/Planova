@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "events",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})},
-        indexes = {@Index(columnList = "name"), @Index(columnList = "start_date")})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 @Getter
 @Setter
 @NoArgsConstructor

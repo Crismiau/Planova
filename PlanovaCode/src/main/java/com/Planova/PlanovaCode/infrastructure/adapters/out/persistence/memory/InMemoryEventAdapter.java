@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -65,6 +66,26 @@ public class InMemoryEventAdapter implements EventRepositoryPort {
     @Override
     public void deleteById(Long id) {
         store.remove(id);
+    }
+
+    @Override
+    public List<Event> findByVenue(Long venueId) {
+        return List.of();
+    }
+
+    @Override
+    public List<Event> findByDateRange(LocalDateTime start, LocalDateTime end) {
+        return List.of();
+    }
+
+    @Override
+    public List<Event> searchFiltered(Long venueId, String category, LocalDateTime startDate, LocalDateTime endDate) {
+        return List.of();
+    }
+
+    @Override
+    public List<Event> findAllOptimized() {
+        return List.of();
     }
 
     private Event copy(Event e) {

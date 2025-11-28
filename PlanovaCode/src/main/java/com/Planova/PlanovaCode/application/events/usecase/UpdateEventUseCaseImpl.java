@@ -8,7 +8,8 @@ import com.Planova.PlanovaCode.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 @RequiredArgsConstructor
 @Service
 public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
@@ -16,6 +17,7 @@ public class UpdateEventUseCaseImpl implements UpdateEventUseCase {
     private  final EventRepositoryPort eventRepositoryPort;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Event update(Long id, Event event){
 
         Event existing = eventRepositoryPort.findById(id).orElseThrow(() -> new NotFoundException("Event not found"));

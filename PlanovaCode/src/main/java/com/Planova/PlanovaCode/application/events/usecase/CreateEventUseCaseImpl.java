@@ -6,8 +6,10 @@ import com.Planova.PlanovaCode.domain.ports.out.EventRepositoryPort;
 import com.Planova.PlanovaCode.domain.ports.out.VenueRepositoryPort;
 import com.Planova.PlanovaCode.exception.DuplicateResourceException;
 import com.Planova.PlanovaCode.exception.ResourceNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 @RequiredArgsConstructor
 @Service
@@ -15,8 +17,7 @@ public class CreateEventUseCaseImpl implements CreateEventUseCase {
 
     private final EventRepositoryPort eventRepository;
     private final VenueRepositoryPort venueRepository;
-
-    @Override
+    @Transactional(propagation = Propagation.REQUIRED)    @Override
     public Event create(Event event) {
 
         // Validación nombre duplicado
