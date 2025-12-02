@@ -19,3 +19,4 @@ CREATE TABLE events (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_event_name UNIQUE (name)
 );
+

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
 public class EventController {
+
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EventController.class);
 
     private final CreateEventUseCase createUseCase;
     private final GetAllEventsUseCase getAllUseCase;
@@ -42,15 +47,21 @@ public class EventController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public EventResponseDTO create(@RequestBody EventRequestDTO req) {
+        log.info("Post /events - Solicitud recibida");
         Event domain = dtoMapper.toDomain(req);
         Event created = createUseCase.create(domain);
         return dtoMapper.toResponse(created);
     }
 
+
+
+
+
     @Operation(summary = "Get all events")
     @ApiResponse(responseCode = "200", description = "List of events returned successfully")
     @GetMapping
     public Page<EventResponseDTO> getAll(@PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        log.info("Get /events - Solicitud recibida");
         Page<Event> eventPage = getAllUseCase.getAll(pageable);
         return eventPage.map(dtoMapper::toResponse);
     }
@@ -62,6 +73,7 @@ public class EventController {
     })
     @GetMapping("/{id}")
     public EventResponseDTO getById(@PathVariable Long id) {
+        log.info("Get /eventsById - Solicitud recibida");
         Event event = getByIdUseCase.getById(id);
         return dtoMapper.toResponse(event);
     }
@@ -75,6 +87,7 @@ public class EventController {
     })
     @PutMapping("/{id}")
     public EventResponseDTO update(@PathVariable Long id, @RequestBody EventRequestDTO req) {
+        log.info("Update /eventsById - Solicitud recibida");
         Event domain = dtoMapper.toDomain(req);
         Event updated = updateUseCase.update(id, domain);
         return dtoMapper.toResponse(updated);
@@ -87,6 +100,7 @@ public class EventController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("Delete /DeleteById - Solicitud recibida");
         boolean deleted = deleteUseCase.delete(id);
         if (!deleted) {
             return ResponseEntity.notFound().build();
